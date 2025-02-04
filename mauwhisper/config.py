@@ -24,7 +24,7 @@ class Config(BaseProxyConfig):
         if "models" not in self:
             return
         self.loaded_model = [
-            (model, Model(model=model, **args)) for model in self["models"]
+            (model, Model(model=model, **args)) for model in self["models"].split(",")
         ]
 
     def params(self) -> Dict[Any, Any]:
