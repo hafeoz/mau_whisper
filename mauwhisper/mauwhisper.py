@@ -22,7 +22,10 @@ class MauWhisper(Plugin):
             self.log.warning(f"Audio event without media received")
             return
         assert isinstance(self.config, Config)
-        reply = await evt.reply(self.config["default_msg"])
+        if "default_msg" in self.config:
+            reply = await evt.reply(self.config["default_msg"])
+        else:
+            reply = None
 
         content_info = content.info
         assert isinstance(content_info, MediaInfo)
@@ -39,14 +42,22 @@ class MauWhisper(Plugin):
                 return
 
             formatted_text = ""
+            self.log.debug(
+                f"transcribe params: {self.config.loaded_model.get_params()}"
+            )
             async for segment in transcribe_audio(f.name, self.config.loaded_model):
                 formatted_text += segment.text
-                await evt.respond(
-                    formatted_text,
-                    markdown=False,
-                    allow_html=False,
-                    edits=reply,
-                )
+                if reply is None:
+                    reply = await evt.reply(
+                        formatted_text, markdown=False, allow_html=False
+                    )
+                else:
+                    await evt.respond(
+                        formatted_text,
+                        markdown=False,
+                        allow_html=False,
+                        edits=reply,
+                    )
 
     async def start(self) -> None:
         assert isinstance(self.config, Config)
