@@ -1,12 +1,10 @@
-from typing import Any, AsyncGenerator, Optional
+from typing import Any, AsyncGenerator
 from pywhispercpp.model import Model, Segment
 import asyncio
 import threading
 
-loaded_model: Optional[Model] = None
 
-
-def transcribe_audio(data: str) -> AsyncGenerator[Segment, Any]:
+def transcribe_audio(data: str, model: Model) -> AsyncGenerator[Segment, Any]:
     # Adapted from https://stackoverflow.com/a/62297994
     loop = asyncio.get_event_loop()
     q = asyncio.Queue(1)
@@ -26,9 +24,7 @@ def transcribe_audio(data: str) -> AsyncGenerator[Segment, Any]:
     def threaded_transcribe():
         nonlocal exception
         try:
-            if loaded_model is None:
-                raise ValueError
-            loaded_model.transcribe(
+            model.transcribe(
                 data,
                 new_segment_callback=lambda f: asyncio.run_coroutine_threadsafe(
                     q.put(f), loop

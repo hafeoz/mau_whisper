@@ -34,8 +34,12 @@ class MauWhisper(Plugin):
         with tempfile.NamedTemporaryFile(suffix=file_suffix) as f:
             await extract_file_from_evt(content, f, evt.client)
 
+            if self.config.loaded_model is None:
+                await evt.respond("No model is loaded.", edits=reply)
+                return
+
             formatted_text = ""
-            async for segment in transcribe_audio(f.name):
+            async for segment in transcribe_audio(f.name, self.config.loaded_model):
                 formatted_text += segment.text
                 await evt.respond(
                     formatted_text,
