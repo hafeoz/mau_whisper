@@ -16,10 +16,12 @@ class Config(BaseProxyConfig):
             pass
 
         args = {}
-        if self["model_dir"] is str:
+        if "model_dir" in self:
             args["models_dir"] = self["model_dir"]
-        if self["language"] is str:
+        if "language" in self:
             args["language"] = self["language"]
-        if self["initial_prompt"] is str:
+        if "initial_prompt" in self:
             args["initial_prompt"] = self["initial_prompt"]
+        if "model" not in self:
+            return
         self.loaded_model = Model(model=self["model"], **args)
