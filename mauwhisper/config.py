@@ -21,7 +21,7 @@ class Config(BaseProxyConfig):
             args["models_dir"] = self["model_dir"]
         if "language" in self:
             args["language"] = self["language"]
-        if "initial_prompt" in self:
+        if "prompt" in self:
             args["initial_prompt"] = self["prompt"]
         if "model" not in self:
             return
@@ -31,6 +31,6 @@ class Config(BaseProxyConfig):
         args = {}
         if "language" in self:
             args["language"] = self["language"]
-        if "initial_prompt" in self:
+        if "prompt" in self:
             args["initial_prompt"] = self["prompt"]
         return args
