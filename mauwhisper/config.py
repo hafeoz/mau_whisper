@@ -21,7 +21,7 @@ class Config(BaseProxyConfig):
         if "language" in self:
             args["language"] = self["language"]
         if "initial_prompt" in self:
-            args["initial_prompt"] = self["initial_prompt"]
+            args["initial_prompt"] = self["prompt"]
         if "model" not in self:
             return
         self.loaded_model = Model(model=self["model"], **args)
