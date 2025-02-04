@@ -8,10 +8,14 @@ class Config(BaseProxyConfig):
         helper.copy("model")
         helper.copy("model_dir")
         helper.copy("language")
+        helper.copy("prompt")
         try:
             del self.loaded_model
         except AttributeError:
             pass
         self.loaded_model = Model(
-            model=self["model"], models_dir=self["model_dir"], language=self["language"]
+            model=self["model"],
+            models_dir=self["model_dir"],
+            language=self["language"],
+            initial_prompt=self["prompt"],
         )
