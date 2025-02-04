@@ -10,8 +10,6 @@ class Config(BaseProxyConfig):
         helper.copy("model_dir")
         helper.copy("language")
         global loaded_model
-        if loaded_model is not None:
-            del loaded_model
         loaded_model = Model(
             model=self["model"], models_dir=self["model_dir"], language=self["language"]
         )
