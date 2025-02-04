@@ -44,6 +44,10 @@ class MauWhisper(Plugin):
                     edits=reply,
                 )
 
+    async def start(self) -> None:
+        assert isinstance(self.config, Config)
+        self.config.load_and_update()
+
     @classmethod
     def get_config_class(cls) -> type[BaseProxyConfig]:
         return Config
