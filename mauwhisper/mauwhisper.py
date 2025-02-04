@@ -1,3 +1,4 @@
+from typing import Tuple
 from maubot.plugin_base import Plugin
 from maubot.matrix import MaubotMessageEvent as MessageEvent
 from mautrix.types import MediaInfo, MediaMessageEventContent, MessageType
@@ -12,7 +13,7 @@ import tempfile
 
 class MauWhisper(Plugin):
     @command.passive("", msgtypes=(MessageType.AUDIO,))
-    async def transcribe(self, evt: MessageEvent) -> None:
+    async def transcribe(self, evt: MessageEvent, _: Tuple[str]) -> None:
         if evt.content.msgtype != MessageType.AUDIO:
             self.log.warning(f"Non-audio msgtype received {evt.content.msgtype}")
             return
