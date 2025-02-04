@@ -24,6 +24,7 @@ def transcribe_audio(data: str) -> AsyncGenerator[Segment, Any]:
             raise exception
 
     def threaded_transcribe():
+        global loaded_model
         nonlocal exception
         try:
             if loaded_model is None:
