@@ -1,3 +1,4 @@
+from typing import Any, Dict
 from mautrix.util.config import BaseProxyConfig, ConfigUpdateHelper
 from pywhispercpp.model import Model
 
@@ -25,3 +26,11 @@ class Config(BaseProxyConfig):
         if "model" not in self:
             return
         self.loaded_model = Model(model=self["model"], **args)
+
+    def params(self) -> Dict[Any, Any]:
+        args = {}
+        if "language" in self:
+            args["language"] = self["language"]
+        if "initial_prompt" in self:
+            args["initial_prompt"] = self["prompt"]
+        return args

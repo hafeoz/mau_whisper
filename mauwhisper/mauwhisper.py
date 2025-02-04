@@ -42,10 +42,12 @@ class MauWhisper(Plugin):
                 return
 
             formatted_text = ""
-            self.log.debug(
-                f"transcribe params: {self.config.loaded_model.get_params()}"
-            )
-            async for segment in transcribe_audio(f.name, self.config.loaded_model):
+            self.log.debug(f"model params: {self.config.loaded_model.get_params()}")
+            transcribe_params = self.config.params()
+            self.log.debug(f"transcribe params: {transcribe_params}")
+            async for segment in transcribe_audio(
+                f.name, self.config.loaded_model, **transcribe_params
+            ):
                 formatted_text += segment.text
                 if reply is None:
                     reply = await evt.reply(

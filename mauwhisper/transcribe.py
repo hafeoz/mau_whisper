@@ -4,7 +4,7 @@ import asyncio
 import threading
 
 
-def transcribe_audio(data: str, model: Model) -> AsyncGenerator[Segment, Any]:
+def transcribe_audio(data: str, model: Model, **params) -> AsyncGenerator[Segment, Any]:
     # Adapted from https://stackoverflow.com/a/62297994
     loop = asyncio.get_event_loop()
     q = asyncio.Queue(1)
@@ -29,6 +29,7 @@ def transcribe_audio(data: str, model: Model) -> AsyncGenerator[Segment, Any]:
                 new_segment_callback=lambda f: asyncio.run_coroutine_threadsafe(
                     q.put(f), loop
                 ).result(),
+                **params
             )
         except Exception as e:
             exception = e
