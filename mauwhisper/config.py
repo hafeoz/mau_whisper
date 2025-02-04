@@ -11,6 +11,7 @@ class Config(BaseProxyConfig):
         helper.copy("language")
         helper.copy("prompt")
         helper.copy("append_model")
+        helper.copy("segment_separator")
 
         try:
             self.loaded_model.clear()
