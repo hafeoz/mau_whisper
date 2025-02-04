@@ -9,13 +9,17 @@ class Config(BaseProxyConfig):
         helper.copy("model_dir")
         helper.copy("language")
         helper.copy("prompt")
+
         try:
             del self.loaded_model
         except AttributeError:
             pass
-        self.loaded_model = Model(
-            model=self["model"],
-            models_dir=self["model_dir"],
-            language=self["language"],
-            initial_prompt=self["prompt"],
-        )
+
+        args = {}
+        if self["model_dir"] is str:
+            args["models_dir"] = self["model_dir"]
+        if self["language"] is str:
+            args["language"] = self["language"]
+        if self["initial_prompt"] is str:
+            args["initial_prompt"] = self["initial_prompt"]
+        self.loaded_model = Model(model=self["model"], **args)
