@@ -6,26 +6,26 @@ from pywhispercpp.model import Model
 class Config(BaseProxyConfig):
     def do_update(self, helper: ConfigUpdateHelper) -> None:
         helper.copy("default_msg")
-        helper.copy("model")
+        helper.copy("models")
         helper.copy("model_dir")
         helper.copy("language")
         helper.copy("prompt")
+        helper.copy("append_model")
 
         try:
-            del self.loaded_model
+            self.loaded_model.clear()
         except AttributeError:
             pass
+        self.loaded_model = []
 
         args = {}
         if "model_dir" in self:
             args["models_dir"] = self["model_dir"]
-        if "language" in self:
-            args["language"] = self["language"]
-        if "prompt" in self:
-            args["initial_prompt"] = self["prompt"]
-        if "model" not in self:
+        if "models" not in self:
             return
-        self.loaded_model = Model(model=self["model"], **args)
+        self.loaded_model = [
+            (model, Model(model=model, **args)) for model in self["models"]
+        ]
 
     def params(self) -> Dict[Any, Any]:
         args = {}
