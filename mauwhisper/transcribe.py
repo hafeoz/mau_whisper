@@ -1,13 +1,15 @@
 from typing import Any, AsyncGenerator
+from asyncio import AbstractEventLoop, Queue, run_coroutine_threadsafe
+from threading import Thread
+
 from pywhispercpp.model import Model, Segment
-import asyncio
-import threading
 
 
-def transcribe_audio(data: str, model: Model, **params) -> AsyncGenerator[Segment, Any]:
+def transcribe_audio(
+    data: str, model: Model, loop: AbstractEventLoop, **params
+) -> AsyncGenerator[Segment, Any]:
     # Adapted from https://stackoverflow.com/a/62297994
-    loop = asyncio.get_event_loop()
-    q = asyncio.Queue(1)
+    q = Queue(1)
     exception = None
     _END = object()
 
@@ -26,7 +28,7 @@ def transcribe_audio(data: str, model: Model, **params) -> AsyncGenerator[Segmen
         try:
             model.transcribe(
                 data,
-                new_segment_callback=lambda f: asyncio.run_coroutine_threadsafe(
+                new_segment_callback=lambda f: run_coroutine_threadsafe(
                     q.put(f), loop
                 ).result(),
                 **params
@@ -34,7 +36,7 @@ def transcribe_audio(data: str, model: Model, **params) -> AsyncGenerator[Segmen
         except Exception as e:
             exception = e
         finally:
-            asyncio.run_coroutine_threadsafe(q.put(_END), loop).result()
+            run_coroutine_threadsafe(q.put(_END), loop).result()
 
-    threading.Thread(target=threaded_transcribe).start()
+    Thread(target=threaded_transcribe).start()
     return yield_queue_items()

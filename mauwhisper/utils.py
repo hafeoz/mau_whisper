@@ -1,4 +1,5 @@
 from typing import IO
+
 from mautrix.crypto.attachments import decrypt_attachment
 from mautrix.types import MediaMessageEventContent
 from mautrix.client import Client

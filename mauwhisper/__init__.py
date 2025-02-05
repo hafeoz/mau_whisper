@@ -1,1 +1,1 @@
-from .mauwhisper import MauWhisper
+from .mauwhisper import MauWhisper as MauWhisper
