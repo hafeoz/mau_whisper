@@ -1,0 +1,28 @@
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Compile and Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+      - name: Install maubot
+        run:  pip install --upgrade maubot
+      - name: Build mbc
+        run:  mbc build -o mauwhisper.mbc
+      - name: Release
+        uses: softprops/action-gh-release@master
+        with:
+          files: mauwhisper.mbc
