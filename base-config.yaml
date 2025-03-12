@@ -8,7 +8,7 @@
 models: small,large-v3-turbo,large-v3
 
 # The directory where the models are stored, or where they will be downloaded if they don't exist.
-# model_dir: /var/cache
+# models_dir: /var/cache
 
 # Default reply when the transcription model has yet finished
 # default_msg: "transcribing..."
@@ -31,4 +31,4 @@ append_model: true
 language: ""
 
 # Initial prompt for the model
-# prompt = "以下是普通话的句子"
+# prompt: "以下是普通话的句子"

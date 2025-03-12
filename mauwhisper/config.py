@@ -11,8 +11,8 @@ class Config(BaseProxyConfig):
         except AttributeError:
             self.loaded_model = []
 
-        if "model_dir" in self:
-            model_args = {"model_dir": self["model_dir"]}
+        if "models_dir" in self:
+            model_args = {"models_dir": self["models_dir"]}
         else:
             model_args = {}
 
@@ -24,7 +24,7 @@ class Config(BaseProxyConfig):
     def do_update(self, helper: ConfigUpdateHelper) -> None:
         helper.copy("default_msg")
         helper.copy("models")
-        helper.copy("model_dir")
+        helper.copy("models_dir")
         helper.copy("language")
         helper.copy("prompt")
         helper.copy("append_model")
